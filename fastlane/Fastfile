@@ -1,0 +1,30 @@
+desc 'Release new pod version'
+lane :release_pod do |options|
+  target_message = options[:message]
+  target_version = options[:version]
+  target_sources = options[:sources]
+
+  spec = read_podspec
+  target_project = spec["name"]
+  oldVersion = spec["version"]
+
+  unless oldVersion == target_version
+   version_bump_podspec(version_number: target_version)
+ 	 git_add(path: '.')
+
+ 	 git_commit(path: '.', message: target_message ? target_message : "update version to #{target_version}")
+  
+  	unless git_tag_exists(tag: target_version)
+  		push_to_git_remote
+  		add_git_tag(tag: target_version)
+  		push_git_tags
+  	end
+  end
+
+  pod_lib_lint(allow_warnings: true)
+
+  target_repo = target_repo ? target_repo : "XXXSpecs"
+  target_sources = target_sources ? target_sources :['git@xxx:XXXSpecs.git','https://github.com/CocoaPods/Specs']
+
+  pod_push(repo:target_repo, sources: target_sources, allow_warnings: true)
+end
