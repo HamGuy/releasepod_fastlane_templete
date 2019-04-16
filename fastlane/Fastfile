@@ -23,8 +23,8 @@ lane :release_pod do |options|
 
   pod_lib_lint(allow_warnings: true)
 
-  target_repo = target_repo ? target_repo : "{ReplacaseMe}"
-  target_sources = target_sources ? target_sources :['{ReplacaseMe}.git','https://github.com/CocoaPods/Specs']
+  target_repo = target_repo ? target_repo : "{ReplaceMe}"
+  target_sources = target_sources ? target_sources :['{ReplaceMe}.git','https://github.com/CocoaPods/Specs']
 
   pod_push(repo:target_repo, sources: target_sources, allow_warnings: true)
 end
